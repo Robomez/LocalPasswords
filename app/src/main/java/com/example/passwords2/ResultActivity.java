@@ -10,6 +10,7 @@ Combining these two sources helped in building the majority of an application.
 package com.example.passwords2;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 import android.content.ClipData;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -43,6 +45,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
     BiometricPrompt biometricPrompt;
     BiometricPrompt.PromptInfo promptInfo;
     LinearLayout activity_result_layout;
+    private static final String TAG = "MyLog";
 
     final String[] from = new String[] {DataBaseHelper._ID, DataBaseHelper.ACCOUNT, DataBaseHelper.PASSWORD,
     DataBaseHelper.FILTER};
@@ -57,7 +60,7 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
         activity_result_layout = findViewById(R.id.activity_result);
 
         BiometricManager biometricManager = BiometricManager.from(this);
-        switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
+        switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL | BIOMETRIC_WEAK)) {
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
                 Toast.makeText(getApplicationContext(), "No biometric features available on this device.", Toast.LENGTH_SHORT).show();
                 break;
@@ -71,32 +74,49 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
             case BiometricManager.BIOMETRIC_SUCCESS:
                 /* Use biometricPrompt */
                 break;
+            case BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED:
+                Toast.makeText(getApplicationContext(), "Security vulnerable. Sensor(s) are unavailable until a security update", Toast.LENGTH_SHORT).show();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED:
+                Toast.makeText(getApplicationContext(), "This auth option is incompatible with the current Android version.", Toast.LENGTH_SHORT).show();
+                break;
+            case BiometricManager.BIOMETRIC_STATUS_UNKNOWN:
+                Toast.makeText(getApplicationContext(), "Biometric status unknown.", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         Executor executor = ContextCompat.getMainExecutor(this);
+
 
         biometricPrompt = new BiometricPrompt(ResultActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
+                Log.d(TAG, "App error " + errorCode + " " + errString);
+                if (errorCode == 10) {
+                    finish();
+                }
             }
-
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(), "Successful login", Toast.LENGTH_SHORT).show();
                 activity_result_layout.setVisibility(View.VISIBLE);
             }
-
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
             }
         });
 
-        promptInfo = new BiometricPrompt.PromptInfo.Builder().setTitle("Hello")
-                .setDescription("Use fingerprint to login").setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK | DEVICE_CREDENTIAL).build();
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Authenticate")
+                .setDescription("to enter the app")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG | BIOMETRIC_WEAK | DEVICE_CREDENTIAL)
+                .build();
         biometricPrompt.authenticate(promptInfo);
+
+
 
         DataBaseManager dataBaseManager = new DataBaseManager(this);
         dataBaseManager.open();
