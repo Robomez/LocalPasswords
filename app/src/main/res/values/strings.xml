@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">LocalPasswords</string>
+    <string name="button_result">Go to list</string>
+    <string name="button_back">Back</string>
+    <string name="button_add">Add</string>
+    <string name="button_read">Read</string>
+    <string name="tvGreeting">Welcome to LocalPasswords app</string>
+    <string name="etAccount">Enter account</string>
+    <string name="etPassword">Enter password</string>
+    <string name="etFilter">Enter filter</string>
+    <string name="btnUpdate">Update</string>
+    <string name="btnDelete">Delete</string>
+    <string name="btnAdd">Add</string>
+
+</resources>
