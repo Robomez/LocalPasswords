@@ -87,7 +87,6 @@ public class ResultActivity extends AppCompatActivity implements View.OnClickLis
 
         Executor executor = ContextCompat.getMainExecutor(this);
 
-
         biometricPrompt = new BiometricPrompt(ResultActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
