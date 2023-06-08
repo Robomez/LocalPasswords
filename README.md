@@ -45,7 +45,7 @@ https://developer.android.com/reference/
 But I have to admit, they often seemed difficult for me to understand as one less-comfortable with programming.
 So, StartAndroid course on Java Andriond development was really helpful
 https://startandroid.ru/ru/uroki/vse-uroki-spiskom.html
-Nevertheless, it has its own flaws. It was written mainly in 2011-2012 and lots of thongs have changed since then in Andoid. Many methods became deprecated, some new additions were made etc.
+Nevertheless, it has its own flaws. It was written mainly in 2011-2012 and lots of things have changed since then in Andoid. Many methods became deprecated, some new additions were made etc.
 Combining these two courses helped in building the majority of an application.
 
 - However, using only those two would have left me with defining all SQLite statements in every other activity, which is highly uncomfortable, as standard lessons usually explain SQLite support only in context of only one activity.
