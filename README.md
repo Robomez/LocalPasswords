@@ -1,5 +1,6 @@
 # LocalPasswords
 <img src="HnVideoEditor_2023_07_31_192839932.gif" width=20%>
+
 ## Description:
 In our time and age, sensitive personal data like passwords is leaked to the internet oh so often. Cloud password managers are no exception to this rule –just recently, 22th of December 2022, LastPass’s database was leaked, and this happens time and time again. Of course, no one is interested in security of my passwords more than I am, that's why I've decided to build this application.
 
